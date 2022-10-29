@@ -1,5 +1,5 @@
 /* USER CODE BEGIN Header */
-/*MAIN.C FOR EX2 LAB1*/
+/*MAIN.C FOR EX3 LAB1*/
 /**
   ******************************************************************************
   * @file           : main.c
@@ -33,15 +33,18 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define LED_ON 				0
-#define LED_OFF 			1
-#define RED_DUR 			5
-#define YELLOW_DUR 			2
-#define GREEN_DUR			3
-#define TIMEOUT				0
-#define UPDATE_RED_LED() 	HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, red_state);
-#define UPDATE_YELLOW_LED()	HAL_GPIO_WritePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin, yellow_state);
-#define UPDATE_GREEN_LED()	HAL_GPIO_WritePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin, green_state);
+#define LED_ON 					1
+#define LED_OFF 				0
+#define RED_DUR 				5
+#define YELLOW_DUR 				2
+#define GREEN_DUR				3
+#define TIMEOUT					0
+#define UPDATE_RED_LED_1() 		HAL_GPIO_WritePin(RED_LED_1_GPIO_Port, RED_LED_1_Pin, red_1_state);
+#define UPDATE_YELLOW_LED_1()	HAL_GPIO_WritePin(YELLOW_LED_1_GPIO_Port, YELLOW_LED_1_Pin, yellow_1_state);
+#define UPDATE_GREEN_LED_1()	HAL_GPIO_WritePin(GREEN_LED_1_GPIO_Port, GREEN_LED_1_Pin, green_1_state);
+#define UPDATE_RED_LED_2() 		HAL_GPIO_WritePin(RED_LED_2_GPIO_Port, RED_LED_2_Pin, red_2_state);
+#define UPDATE_YELLOW_LED_2()	HAL_GPIO_WritePin(YELLOW_LED_2_GPIO_Port, YELLOW_LED_2_Pin, yellow_2_state);
+#define UPDATE_GREEN_LED_2()	HAL_GPIO_WritePin(GREEN_LED_2_GPIO_Port, GREEN_LED_2_Pin, green_2_state);
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -101,49 +104,88 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int red_state = LED_ON;
-  int yellow_state = LED_OFF;
-  int green_state = LED_OFF;
+  int red_1_state = LED_ON;
+  int yellow_1_state = LED_OFF;
+  int green_1_state = LED_OFF;
+  int red_2_state = LED_OFF;
+  int yellow_2_state = LED_OFF;
+  int green_2_state = LED_ON;
 
-  int red_counter = RED_DUR;
-  int yellow_counter = YELLOW_DUR;
-  int green_counter = GREEN_DUR;
+  int red_1_counter = RED_DUR;
+  int red_2_counter = RED_DUR;
+  int yellow_1_counter = YELLOW_DUR;
+  int yellow_2_counter = YELLOW_DUR;
+  int green_1_counter = GREEN_DUR;
+  int green_2_counter = GREEN_DUR;
   while (1)
   {
+	  // switch signal for red-yellow-green 1
+	  	  if (red_1_counter == TIMEOUT && red_1_state == LED_ON)
+	  	  {
+	  		  red_1_state = LED_OFF;
+	  		  red_1_counter = RED_DUR;
+	  		  yellow_1_state = LED_OFF;
+	  		  green_1_state = LED_ON;
+	  	  }
+	  	  if (yellow_1_counter == TIMEOUT && yellow_1_state == LED_ON)
+	  	  {
+	  		  yellow_1_state = LED_OFF;
+	  		  yellow_1_counter = YELLOW_DUR;
+	  		  red_1_state = LED_ON;
+	  		  green_1_state = LED_OFF;
+	  	  }
+	  	  if (green_1_counter == TIMEOUT && green_1_state == LED_ON)
+	  	  {
+	  		  green_1_state = LED_OFF;
+	  		  green_1_counter = GREEN_DUR;
+	  		  red_1_state = LED_OFF;
+	  		  yellow_1_state = LED_ON;
+	  	  }
+	  	  // switch signal for red-yellow-green 2
+	  	  if (red_2_counter == TIMEOUT && red_2_state == LED_ON)
+	  	  {
+	  		  red_2_state = LED_OFF;
+	  		  red_2_counter = RED_DUR;
+	  		  yellow_2_state = LED_OFF;
+	  		  green_2_state = LED_ON;
+	  	  }
+	  	  if (yellow_2_counter == TIMEOUT && yellow_2_state == LED_ON)
+	  	  {
+	  		  yellow_2_state = LED_OFF;
+	  		  yellow_2_counter = YELLOW_DUR;
+	  		  red_2_state = LED_ON;
+	  		  green_2_state = LED_OFF;
+	  	  }
+	  	  if (green_2_counter == TIMEOUT && green_2_state == LED_ON)
+	  	  {
+	  		  green_2_state = LED_OFF;
+	  		  green_2_counter = GREEN_DUR;
+	  		  red_2_state = LED_OFF;
+	  		  yellow_2_state = LED_ON;
+	  	  }
+	  	  //counter for red-yellow-green 1
+	  	  if (red_1_state == LED_ON) red_1_counter--;
+	  	  if (yellow_1_state == LED_ON) yellow_1_counter--;
+	  	  if (green_1_state == LED_ON) green_1_counter--;
+	  	  //counter for red-yellow-green 2
+	  	  if (red_2_state == LED_ON) red_2_counter--;
+	  	  if (yellow_2_state == LED_ON) yellow_2_counter--;
+	  	  if (green_2_state == LED_ON) green_2_counter--;
+	  	  // In this configuration (component->LED->ground), SET is on.
+	  	  //on-off state for red-yellow-green 1
+	  	  UPDATE_GREEN_LED_1();
+	  	  UPDATE_RED_LED_1();
+	  	  UPDATE_YELLOW_LED_1();
+	  	  //on-off state for red-yellow-green 2
+	  	  UPDATE_GREEN_LED_2();
+		  UPDATE_RED_LED_2();
+		  UPDATE_YELLOW_LED_2();
+	  	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
-	  if (red_counter == TIMEOUT && red_state == LED_ON)
-	  {
-		  red_state = LED_OFF;
-		  red_counter = RED_DUR;
-		  yellow_state = LED_OFF;
-		  green_state = LED_ON;
-
-	  }
-	  if (yellow_counter == TIMEOUT && yellow_state == LED_ON)
-	  {
-		  yellow_state = LED_OFF;
-		  yellow_counter = YELLOW_DUR;
-		  red_state = LED_ON;
-		  green_state = LED_OFF;
-	  }
-	  if (green_counter == TIMEOUT && green_state == LED_ON)
-	  {
-		  green_state = LED_OFF;
-		  green_counter = GREEN_DUR;
-		  red_state = LED_OFF;
-		  yellow_state = LED_ON;
-	  }
-	  if (red_state == LED_ON) red_counter--;
-	  if (yellow_state == LED_ON) yellow_counter--;
-	  if (green_state == LED_ON) green_counter--;
-	  // In this configuration (power->LED->component), RESET is on.
-	  UPDATE_RED_LED();
-	  UPDATE_YELLOW_LED();
-	  UPDATE_GREEN_LED();
-	  HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
-  }
+
+    }
   /* USER CODE END 3 */
 }
 
@@ -195,10 +237,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, RED_LED_Pin|YELLOW_LED_Pin|GREEN_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, RED_LED_1_Pin|YELLOW_LED_1_Pin|GREEN_LED_1_Pin|RED_LED_2_Pin
+                          |YELLOW_LED_2_Pin|GREEN_LED_2_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : RED_LED_Pin YELLOW_LED_Pin GREEN_LED_Pin */
-  GPIO_InitStruct.Pin = RED_LED_Pin|YELLOW_LED_Pin|GREEN_LED_Pin;
+  /*Configure GPIO pins : RED_LED_1_Pin YELLOW_LED_1_Pin GREEN_LED_1_Pin RED_LED_2_Pin
+                           YELLOW_LED_2_Pin GREEN_LED_2_Pin */
+  GPIO_InitStruct.Pin = RED_LED_1_Pin|YELLOW_LED_1_Pin|GREEN_LED_1_Pin|RED_LED_2_Pin
+                          |YELLOW_LED_2_Pin|GREEN_LED_2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

@@ -1,4 +1,5 @@
 /* USER CODE BEGIN Header */
+/*MAIN.C FOR EX1 LAB1*/
 /**
   ******************************************************************************
   * @file           : main.c
@@ -42,7 +43,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+#define LED_ON 		0
+#define LED_OFF 	1
+#define DURATION 	2
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -91,30 +94,28 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int counter = 2;
-  int red_state = 1;
-  int yellow_state = 0;
+  int counter = DURATION;
+  int red_state = LED_OFF;
+  int yellow_state = LED_ON;
   while (1)
   {
-	  if (counter == 0 && red_state == 1 && yellow_state == 0)
+	  if (counter == 0 && red_state == LED_OFF && yellow_state == LED_ON)
 	  {
-		  counter = 2;
+		  counter = DURATION;
 		  red_state = 1 - red_state;
 		  yellow_state = 1 - yellow_state;
 	  }
-	  if (counter == 0 && red_state == 0 && yellow_state == 1)
+	  if (counter == 0 && red_state == LED_ON && yellow_state == LED_OFF)
 	  {
-		  counter = 2;
+		  counter = DURATION;
 		  red_state = 1 - red_state;
 		  yellow_state = 1 - yellow_state;
 	  }
 	  counter--;
 	  // the state SET and RESET depend on the way the LED is connected to the component.
 	  // In this configuration (power->LED->component), RESET is on.
-	  if (red_state == 1) HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, RESET);
-	  if (yellow_state == 1) HAL_GPIO_WritePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin, RESET);
-	  if (red_state == 0) HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, SET);
-	  if (yellow_state == 0) HAL_GPIO_WritePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin, SET);
+	  HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, red_state);
+	  HAL_GPIO_WritePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin, yellow_state);
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
