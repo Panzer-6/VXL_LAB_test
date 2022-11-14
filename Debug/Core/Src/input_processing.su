@@ -1,0 +1,4 @@
+input_processing.c:33:6:UPDATE_RED_LED	16	static
+input_processing.c:38:6:UPDATE_AMBER_LED	16	static
+input_processing.c:43:6:UPDATE_GREEN_LED	16	static
+input_processing.c:71:6:fsm_for_input_processing	8	static

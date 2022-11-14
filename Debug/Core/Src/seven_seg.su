@@ -1,0 +1,3 @@
+seven_seg.c:19:6:display7SEG	296	static
+seven_seg.c:40:6:update7SEG	16	static
+seven_seg.c:87:6:updateLedBuffer	16	static
