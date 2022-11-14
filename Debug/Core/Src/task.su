@@ -1,0 +1,5 @@
+task.c:9:6:toggleRedLed	8	static
+task.c:14:6:toggleGreenLed	8	static
+task.c:19:6:toggleYellowLed	8	static
+task.c:24:6:toggleBlueLed	8	static
+task.c:29:6:toggleOrangeLed	8	static

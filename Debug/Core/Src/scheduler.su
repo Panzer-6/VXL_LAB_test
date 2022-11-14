@@ -1,0 +1,8 @@
+scheduler.c:17:6:swap	48	static
+scheduler.c:24:6:sortTask	16	static
+scheduler.c:40:8:topTask	24	static
+scheduler.c:45:6:SCH_Add_Task	24	static
+scheduler.c:57:6:SCH_Delete_Task	24	static
+scheduler.c:78:6:SCH_Update	4	static
+scheduler.c:104:6:SCH_Dispatch_Tasks	48	static
+scheduler.c:139:6:SCH_Init	40	static
