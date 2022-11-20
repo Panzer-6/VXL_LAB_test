@@ -57,6 +57,35 @@ sTasks topTask()
 
 void SCH_Add_Task ( void (*pFunction)() , uint32_t DELAY, uint32_t PERIOD){
 	if(current_index_task < SCH_MAX_TASKS){
+		if (current_index_task == 0)
+		{
+			SCH_tasks_G[0].pTask = pFunction;
+			SCH_tasks_G[0].Delay = DELAY / TIMER_TICK;
+			SCH_tasks_G[0].Period =  PERIOD / TIMER_TICK;
+			SCH_tasks_G[0].RunMe = 0;
+			current_index_task++;
+		}
+		else
+		{
+			int insert_index = 0;
+			sTasks insertTask;
+			insertTask.pTask = pFunction;
+			insertTask.Delay = DELAY / TIMER_TICK;
+			insertTask.Period = PERIOD / TIMER_TICK;
+			insertTask.RunMe = 0;
+			while (insertTask.Delay > SCH_tasks_G[insert_index].Delay && insert_index < current_index_task)
+			{
+				insertTask.Delay -= SCH_tasks_G[insert_index].Delay;
+				insert_index++;
+
+			}
+			current_index_task++;
+			shiftTask(insert_index);
+			SCH_tasks_G[insert_index] = insertTask;
+			SCH_tasks_G[insert_index + 1].Delay -= SCH_tasks_G[insert_index].Delay;
+		}
+		/*
+		else if (())
 		int insert_index = 0;
 		for (insert_index = 0; insert_index < current_index_task; insert_index++)
 		{
@@ -72,6 +101,7 @@ void SCH_Add_Task ( void (*pFunction)() , uint32_t DELAY, uint32_t PERIOD){
 		{
 			SCH_tasks_G[i].TaskID = i;
 		}
+		*/
 	}
 }
 
@@ -145,10 +175,6 @@ void SCH_Dispatch_Tasks(void){
 		{
 			SCH_tasks_G[0].RunMe--;
 			(*SCH_tasks_G[0].pTask)();
-			for (int i = 1; i < current_index_task; i++)
-			{
-				SCH_tasks_G[i].Delay -= recentTask.Delay;
-			}
 			if (SCH_tasks_G[1].Delay == 0) SCH_tasks_G[1].RunMe++;
 			if (SCH_tasks_G[0].Period > 0) SCH_Add_Task(SCH_tasks_G[0].pTask, SCH_tasks_G[0].Period * TIMER_TICK, SCH_tasks_G[0].Period * TIMER_TICK);
 			SCH_Delete_Task(0);
@@ -159,10 +185,10 @@ void SCH_Dispatch_Tasks(void){
 
 void SCH_Init(void)
 {
-	  SCH_Add_Task(toggleBlueLed, 1500, 1000);
-	  SCH_Add_Task(toggleRedLed, 0, 1000);
-	  SCH_Add_Task(toggleOrangeLed, 2000, 1000);
-	  SCH_Add_Task(toggleYellowLed, 1000, 1000);
-	  SCH_Add_Task(toggleGreenLed, 500, 1000);
+	  SCH_Add_Task(toggleBlueLed, 0, 2000);
+	  SCH_Add_Task(toggleRedLed, 0, 500);
+	  SCH_Add_Task(toggleOrangeLed, 0, 2500);
+	  SCH_Add_Task(toggleYellowLed, 0, 1500);
+	  SCH_Add_Task(toggleGreenLed, 0, 1000);
 	  recentTask = topTask();
 }
