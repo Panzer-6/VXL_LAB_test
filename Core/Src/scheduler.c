@@ -37,6 +37,19 @@ void sortTask()
 	}
 }
 
+void shiftTask(int index)
+{
+	for (int i = current_index_task - 1; i > index; i--)
+	{
+		SCH_tasks_G[i] = SCH_tasks_G[i - 1];
+	}
+	SCH_tasks_G[index].pTask = 0x0000;
+	SCH_tasks_G[index].Delay = 0;
+	SCH_tasks_G[index].Period =  0;
+	SCH_tasks_G[index].RunMe = 0;
+	SCH_tasks_G[index].TaskID = 0;
+}
+
 sTasks topTask()
 {
 	return SCH_tasks_G[0];
@@ -44,13 +57,21 @@ sTasks topTask()
 
 void SCH_Add_Task ( void (*pFunction)() , uint32_t DELAY, uint32_t PERIOD){
 	if(current_index_task < SCH_MAX_TASKS){
-		SCH_tasks_G[current_index_task].pTask = pFunction;
-		SCH_tasks_G[current_index_task].Delay = DELAY / TIMER_TICK;
-		SCH_tasks_G[current_index_task].Period =  PERIOD / TIMER_TICK;
-		SCH_tasks_G[current_index_task].RunMe = 0;
-		sortTask();
-		recentDelay = SCH_tasks_G[0].Delay;
+		int insert_index = 0;
+		for (insert_index = 0; insert_index < current_index_task; insert_index++)
+		{
+			if (SCH_tasks_G[insert_index].Delay > (DELAY / TIMER_TICK)) break;
+		}
 		current_index_task++;
+		shiftTask(insert_index);
+		SCH_tasks_G[insert_index].pTask = pFunction;
+		SCH_tasks_G[insert_index].Delay = DELAY / TIMER_TICK;
+		SCH_tasks_G[insert_index].Period =  PERIOD / TIMER_TICK;
+		SCH_tasks_G[insert_index].RunMe = 0;
+		for (int i = 0; i < current_index_task; i++)
+		{
+			SCH_tasks_G[i].TaskID = i;
+		}
 	}
 }
 
